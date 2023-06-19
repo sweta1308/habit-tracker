@@ -1,10 +1,15 @@
-import uuid from "react-uuid";
 import { useHabit } from "../../context/HabitContext";
 import "./AddHabit.css";
 
-export const AddHabit = ({ display, closeHandler, editBtnHandler }) => {
-  const { habitDetails, setHabitDetails, addHabit, isEditBtn, editHabit } =
-    useHabit();
+export const AddHabit = ({ display }) => {
+  const {
+    habitDetails,
+    setHabitDetails,
+    addHabit,
+    modalVisible,
+    setModalVisible,
+    editHabit,
+  } = useHabit();
   const { name, repeat, goal, time, startDate } = habitDetails;
 
   return (
@@ -15,9 +20,13 @@ export const AddHabit = ({ display, closeHandler, editBtnHandler }) => {
           <i
             className="fa-solid fa-xmark x-icon"
             onClick={() => {
-              closeHandler();
-              editBtnHandler();
+              setModalVisible({
+                ...modalVisible,
+                isEditBtn: false,
+                isAddHabitVisible: false,
+              });
               setHabitDetails({
+                id: "",
                 name: "",
                 repeat: "",
                 goal: "",
@@ -112,13 +121,17 @@ export const AddHabit = ({ display, closeHandler, editBtnHandler }) => {
         <button
           className="add-btn"
           onClick={() => {
-            isEditBtn
+            modalVisible.isEditBtn
               ? editHabit(habitDetails)
-              : addHabit({ ...habitDetails, id: uuid() });
-            closeHandler();
+              : addHabit(habitDetails);
+            setModalVisible({
+              ...modalVisible,
+              isEditBtn: false,
+              isAddHabitVisible: false,
+            });
           }}
         >
-          {isEditBtn ? "Edit" : "Add"}
+          {modalVisible.isEditBtn ? "Edit" : "Add"}
         </button>
       </div>
     </>

@@ -1,16 +1,20 @@
 import { createContext, useContext, useState } from "react";
 import { toast } from "react-toastify";
+import uuid from "react-uuid";
 
 const HabitContext = createContext();
 
 export const HabitProvider = ({ children }) => {
   const [habitData, setHabitData] = useState([]);
   const [habitSelected, setHabitSelected] = useState({});
-  const [isEditBtn, setIsEditBtn] = useState(false);
   const [archive, setArchive] = useState([]);
-  const [isAddHabitVisible, setIsAddHabitVisible] = useState(false);
-  const [isHabitDetailsVisible, setIsHabitDetailsVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState({
+    isAddHabitVisible: false,
+    isHabitDetailsVisible: false,
+    isEditBtn: false,
+  });
   const initialState = {
+    id: uuid(),
     name: "",
     repeat: "",
     goal: "",
@@ -51,7 +55,7 @@ export const HabitProvider = ({ children }) => {
     archive.filter((data) => data.name === habit.name);
 
   const editHabit = (habit) => {
-    habitData.map((data) => (data.name === habit.name ? habit : data));
+    habitData.map((data) => (data.id === habit.id ? habit : data));
   };
 
   return (
@@ -63,17 +67,13 @@ export const HabitProvider = ({ children }) => {
         addHabit,
         habitSelected,
         setHabitSelected,
-        isEditBtn,
-        setIsEditBtn,
         editHabit,
-        isAddHabitVisible,
-        isHabitDetailsVisible,
-        setIsAddHabitVisible,
-        setIsHabitDetailsVisible,
         removeArchive,
         archive,
         addArchive,
         deleteHabit,
+        modalVisible,
+        setModalVisible,
       }}
     >
       {children}

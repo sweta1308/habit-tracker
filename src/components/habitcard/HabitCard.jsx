@@ -1,21 +1,23 @@
 import "./HabitCard.css";
 import { useHabit } from "../../context/HabitContext";
-import uuid from "react-uuid";
 
-export const HabitCard = ({
-  habit,
-  checkVisiblity,
-  showEditModal,
-  editButtonHandler,
-}) => {
-  const { setHabitSelected, setHabitDetails, addArchive, deleteHabit } =
-    useHabit();
+export const HabitCard = ({ habit }) => {
+  const {
+    setHabitSelected,
+    setHabitDetails,
+    addArchive,
+    deleteHabit,
+    setModalVisible,
+  } = useHabit();
   const { name } = habit;
 
   const editHandler = () => {
     setHabitDetails(habit);
-    showEditModal();
-    editButtonHandler();
+    setModalVisible({
+      ...setModalVisible,
+      isAddHabitVisible: true,
+      isEditBtn: true,
+    });
   };
 
   return (
@@ -24,8 +26,10 @@ export const HabitCard = ({
         <div
           style={{ cursor: "pointer" }}
           onClick={() => {
-            checkVisiblity();
-
+            setModalVisible({
+              ...setModalVisible,
+              isHabitDetailsVisible: true,
+            });
             setHabitSelected(habit);
           }}
         >
@@ -36,7 +40,7 @@ export const HabitCard = ({
 
           <i
             className="fa-solid fa-folder"
-            onClick={() => addArchive({ ...habit, id: uuid() })}
+            onClick={() => addArchive(habit)}
           ></i>
 
           <i

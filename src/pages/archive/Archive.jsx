@@ -3,12 +3,7 @@ import { HabitCard } from "../../components/habitcard/HabitCard";
 import { useHabit } from "../../context/HabitContext";
 
 export const Archive = () => {
-  const {
-    archive,
-    setIsHabitDetailsVisible,
-    setIsEditBtn,
-    setIsAddHabitVisible,
-  } = useHabit();
+  const { archive } = useHabit();
 
   const navigate = useNavigate();
   return (
@@ -18,14 +13,7 @@ export const Archive = () => {
       {archive.length === 0 ? (
         <h1>Nothing in archive</h1>
       ) : (
-        archive.map((data) => (
-          <HabitCard
-            habit={data}
-            checkVisiblity={() => setIsHabitDetailsVisible((prev) => !prev)}
-            showEditModal={() => setIsAddHabitVisible(true)}
-            editButtonHandler={() => setIsEditBtn(true)}
-          />
-        ))
+        archive.map((data) => <HabitCard habit={data} />)
       )}
     </>
   );

@@ -6,31 +6,34 @@ import { HabitDetails } from "../../components/habitDetails/HabitDetails";
 import { useNavigate } from "react-router";
 
 export const Home = () => {
-  const {
-    habitData,
-    setIsEditBtn,
-    setIsAddHabitVisible,
-    setIsHabitDetailsVisible,
-    isAddHabitVisible,
-    isHabitDetailsVisible,
-  } = useHabit();
+  const { habitData, modalVisible, setModalVisible } = useHabit();
 
-  const navigate= useNavigate()
+  const navigate = useNavigate();
   return (
     <>
       <div
         className="home"
         style={{
-          filter: isAddHabitVisible || isHabitDetailsVisible ? "blur(5px)" : "",
+          filter:
+            modalVisible.isAddHabitVisible || modalVisible.isHabitDetailsVisible
+              ? "blur(5px)"
+              : "",
         }}
       >
         <div>
           <h1>Habits</h1>
           <i
             className="fa-solid fa-plus plus-icon"
-            onClick={() => setIsAddHabitVisible((prev) => !prev)}
+            onClick={() =>
+              setModalVisible({ ...modalVisible, isAddHabitVisible: true })
+            }
           ></i>
-          <button style={{display: "block"}} onClick={() => navigate('/archived')}>Show Archives</button>
+          <button
+            style={{ display: "block" }}
+            onClick={() => navigate("/archived")}
+          >
+            Show Archives
+          </button>
         </div>
 
         <div className="habit-data">
@@ -39,27 +42,15 @@ export const Home = () => {
           ) : (
             habitData.map((habit) => (
               <div key={habit.id} className="habit">
-                <HabitCard
-                  habit={habit}
-                  checkVisiblity={() =>
-                    setIsHabitDetailsVisible((prev) => !prev)
-                  }
-                  showEditModal={() => setIsAddHabitVisible(true)}
-                  editButtonHandler={() => setIsEditBtn(true)}
-                />
+                <HabitCard habit={habit} />
               </div>
             ))
           )}
         </div>
       </div>
-      <AddHabit
-        display={isAddHabitVisible ? "" : "none"}
-        closeHandler={() => setIsAddHabitVisible((prev) => !prev)}
-        editBtnHandler={() => setIsEditBtn(false)}
-      />
+      <AddHabit display={modalVisible.isAddHabitVisible ? "" : "none"} />
       <HabitDetails
-        display={isHabitDetailsVisible ? "" : "none"}
-        closeDetailsHandler={() => setIsHabitDetailsVisible(false)}
+        display={modalVisible.isHabitDetailsVisible ? "" : "none"}
       />
     </>
   );
